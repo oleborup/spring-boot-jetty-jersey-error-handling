@@ -20,7 +20,7 @@ property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(/.*\\.html)");
 
 in `JerseyConfig`
 
-For errors in the static match case the custom error handler registered in `SampleApp` is used.
+In the real projects all Jersey resource errors are caught by Jersey exception mappers. 
 
 ## Problem
 
