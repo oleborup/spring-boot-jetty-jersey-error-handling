@@ -35,3 +35,13 @@ Verify tests are passing for Spring Boot 2.2.1
 Change Spring Boot version to 2.2.2 in `pom.xml` and run tests again
 
     mvn clean test 
+
+## Observations
+
+Upgrading from 2.2.1 to 2.2.2 the default MVC error handler started to be invoked instead of Jetty custom error handler. To disable the request to `/error` the following was added 
+
+    @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
+    
+## Solutions
+
+Any solutions to achieve the same pre-2.2.2 functionality would be greatly appreciated.

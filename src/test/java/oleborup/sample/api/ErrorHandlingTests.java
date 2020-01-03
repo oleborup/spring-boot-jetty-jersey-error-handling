@@ -40,6 +40,20 @@ public class ErrorHandlingTests {
     }
 
     @Test
+    public void restHello() {
+        Response response = getRequest("/hello").get();
+        assertEquals(200, response.getStatus());
+        assertEquals("{\"hello\":\"world\"}", response.readEntity(String.class));
+    }
+
+    @Test
+    public void restMethodNotAllowed() {
+        Response response = getRequest("/hello").post(null);
+        assertEquals(405, response.getStatus());
+        assertEquals("", response.readEntity(String.class));
+    }
+
+    @Test
     public void staticContent() {
         Response response = getRequest("/index.html").get();
         assertEquals(200, response.getStatus());
