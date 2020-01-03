@@ -19,7 +19,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         super();
 
-        property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(/\\.well-known.*)|(/(image|js|css|fonts)/?.*)|(/.*\\.html)|(/favicon\\.ico)|(/robots\\.txt)");
+        property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(/.*\\.html)");
 
         register(HelloResource.class);
     }

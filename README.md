@@ -1,7 +1,7 @@
 ## Background
 
 We use Spring Boot with Jetty and Jersey for microservices. For security reasons we want to expose as little server identification as possible.
-Jetty server is customized with silent error handler avoid default output.
+Jetty server is customized with silent error handler to avoid default output.
 
 In some cases we need to serve static files in addition to REST resources. For this we use 
 
@@ -15,7 +15,7 @@ In some cases we need to serve static files in addition to REST resources. For t
 and 
 
 ```java
-property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(/\\.well-known.*)|(/(image|js|css|fonts)/?.*)|(/.*\\.html)|(/favicon\\.ico)|(/robots\\.txt)");
+property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(/.*\\.html)");
 ```
 
 in `JerseyConfig`
