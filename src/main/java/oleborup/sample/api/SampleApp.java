@@ -9,6 +9,8 @@ import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -27,6 +29,8 @@ import java.io.IOException;
 @ComponentScan
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
 public class SampleApp {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SampleApp.class);
 
     /**
      * Custom Jetty container with no server tag and content empty error response
@@ -57,15 +61,15 @@ public class SampleApp {
     }
 
     /**
-     * Error handler reviling nothing about the server and returning no content except bad request
+     * Error handler revealing nothing about the server by returning no content
      */
     private static class SilentErrorHandler extends ErrorHandler {
         @Override
         public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
                 throws IOException {
+            LOG.info("Handling error with no content");
             baseRequest.setHandled(true);
         }
-
     }
 
     public static void main(String[] args) {
