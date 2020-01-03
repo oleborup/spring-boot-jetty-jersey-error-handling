@@ -53,18 +53,4 @@ public class ErrorHandlingTests {
         assertEquals("", response.readEntity(String.class));
     }
 
-    @Test
-    public void staticContent() {
-        Response response = getRequest("/index.html").get();
-        assertEquals(200, response.getStatus());
-        assertEquals("<html></html>", response.readEntity(String.class));
-    }
-
-    @Test
-    public void staticContentNotFoundEmptyResponse() {
-        Response response = getRequest("/nonexists.html").get();
-        assertEquals(404, response.getStatus());
-        assertEquals("", response.readEntity(String.class));
-    }
-
 }
