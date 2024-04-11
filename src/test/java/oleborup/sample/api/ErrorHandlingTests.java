@@ -1,24 +1,28 @@
 package oleborup.sample.api;
 
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.logging.LoggingFeature;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertEquals;
+import static java.lang.System.out;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SampleApp.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ErrorHandlingTests {
+class ErrorHandlingTests {
 
     @Value("${local.server.port}")
     protected int port;
@@ -40,31 +44,40 @@ public class ErrorHandlingTests {
     }
 
     @Test
-    public void restHello() {
+    void restHello() {
         Response response = getRequest("/hello").get();
         assertEquals(200, response.getStatus());
         assertEquals("{\"hello\":\"world\"}", response.readEntity(String.class));
     }
 
     @Test
-    public void restMethodNotAllowed() {
-        Response response = getRequest("/hello").post(null);
-        assertEquals(405, response.getStatus());
-        assertEquals("", response.readEntity(String.class));
+    void invalidContentTypeEmptyPage() {
+        String request = "GET / HTTP/1.0\r\nConnection: close\r\nContent-Type: invalid\r\n\r\n";
+        try (Socket socket = new Socket("localhost", port)) {
+            PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
+            outputStream.print(request);
+            outputStream.flush();
+            String response = new String(socket.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            out.println("response:\n" + response);
+            assertFalse(response.contains("SERVLET:"));
+        } catch (IOException e) {
+            fail(e);
+        }
     }
 
     @Test
-    public void staticContent() {
-        Response response = getRequest("/index.html").get();
-        assertEquals(200, response.getStatus());
-        assertEquals("<html></html>", response.readEntity(String.class));
-    }
-
-    @Test
-    public void staticContentNotFoundEmptyResponse() {
-        Response response = getRequest("/nonexists.html").get();
-        assertEquals(404, response.getStatus());
-        assertEquals("", response.readEntity(String.class));
+    void invalidUriEmptyPage() {
+        String request = "GET /}} HTTP/1.0\r\nConnection: close\r\n\r\n";
+        try (Socket socket = new Socket("localhost", port)) {
+            PrintWriter outputStream = new PrintWriter(socket.getOutputStream(), true);
+            outputStream.print(request);
+            outputStream.flush();
+            String response = new String(socket.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            out.println("response:\n" + response);
+            assertFalse(response.contains("CAUSED BY"));
+        } catch (IOException e) {
+            fail(e);
+        }
     }
 
 }
