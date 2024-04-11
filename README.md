@@ -1,6 +1,6 @@
 ## Background
 
-We use Spring Boot with Jetty and Jersey for microservices. For security reasons we want to expose as little server identification as possible.
+We use Spring Boot with Jetty and Jersey for microservices. For security reasons we want to expose as little server identification and implementation details as possible.
 
 ## Version and settings
 
