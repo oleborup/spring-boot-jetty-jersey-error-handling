@@ -71,6 +71,8 @@ The sencond also shows stacktrace
 
 ## Observations
 
+Works correctly with `spring-boot-starter-undertow`.
+
 Using `spring.jersey.type=servlet` the second test does not show stack trace, but still:
 
 ```
