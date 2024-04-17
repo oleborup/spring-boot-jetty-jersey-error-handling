@@ -5,6 +5,7 @@ We use Spring Boot with Jetty and Jersey for microservices. For security reasons
 ## Version and settings
 
 Spring Boot 3.2.4
+Jetty 12.0.7
 Java 17
 
 We use `spring.jersey.type=filter` but have same problem with `servlet`. Other than that no altered properties.
@@ -90,4 +91,4 @@ Using `spring.jersey.type=servlet` the second test does not show stack trace, bu
 </html>
 ```
 
-We have previously implemented custom Jetty error handler to not leak impkementation details, but stopped working with upgrade to Spring Boot 3. Have not figured out how to make a custom error handler with Spring Boot 3.2 and Jetty 12, or if that could resolve the issue. Would prefer to only rely on standard Spring Boot properties.
+We have previously implemented custom Jetty error handler to not leak implementation details, but stopped working with upgrade to Spring Boot 3. Have not figured out how to make a custom error handler with Spring Boot 3.2 and Jetty 12, or if that could resolve the issue. Would prefer to only rely on standard Spring Boot properties.
